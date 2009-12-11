@@ -98,7 +98,6 @@ Xleds 2 3	# This line is a must.
 #define DEFETHDELAY	50
 #define CAPSLOCKLED	1
 #define NUMLOCKLED	2
-#define SCROLLLOCKLED	3
 typedef enum {CLEAR = 0, SET = 1, TOGGLE = 2} LedMode;
 typedef enum {DELAYED = 0, FINISH = 1, NOW = 2} ActionMode;
 #if KERNEL2_0
@@ -371,18 +370,12 @@ transmitted = atol(list[10]);	/* Kernel v2.1.119 */
 #endif
 
 if (received != formerReceived) {
-	led(NUMLOCKLED, SET, DELAYED);
+	led(NUMLOCKLED, SET, FINISH);
 	formerReceived = received;
 } else {
-	led(NUMLOCKLED, CLEAR, DELAYED);
+	led(NUMLOCKLED, CLEAR, FINISH);
 }
 
-if (transmitted != formerTransmitted) {
-	led(SCROLLLOCKLED, SET, FINISH);
-	formerTransmitted = transmitted;
-} else {
-	led(SCROLLLOCKLED, CLEAR, FINISH);
-}
 }
 
 void	led (int led, LedMode mode, ActionMode doAction)
@@ -427,12 +420,6 @@ if (myDisplay) {
 		ledVal = 0L;
 	}
 	switch (led) {
-		case SCROLLLOCKLED:
-			if (mode == SET)
-				ledVal |= LED_SCR;
-			else
-				ledVal &= ~LED_SCR;
-			break;
 		case NUMLOCKLED:
 			if (mode == SET)
 				ledVal |= LED_NUM;
@@ -574,7 +561,6 @@ if (opt_b && ! opt_q)
 if (myDisplay) {
 #if (! REMOVE_X_CODE)
 	clear_led(NUMLOCKLED);
-	clear_led(SCROLLLOCKLED);
 	XCloseDisplay(myDisplay);	/* X */
 #endif
 }
