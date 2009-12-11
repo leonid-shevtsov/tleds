@@ -1,4 +1,7 @@
 VERSION	DATE		WHAT WAS FIXED OR WHAT WAS/IS NEW
+
+1.05b7  11 Dec 2009 Removed scroll lock notification on transmit
+
 1.05b7	2 Apr 1998	Keeps LEDs deattached also after VT is reset if run
 (beta)			with -c option.
 			eth* default delay changed to 50 ms.

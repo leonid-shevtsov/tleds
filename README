@@ -1,3 +1,12 @@
+I modified the utility to use only the numlock light as my scroll lock is already being used for alternative keyboard layout indication.
+
+Compiles on 2.6.x kernels.
+
+Tested on Ubuntu Karmic, kernel 2.6.31-generic with `sudo tleds wlan0`
+
+
+====
+
 Hello You, yes _you_, 
 
 Help for making:
