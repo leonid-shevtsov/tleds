@@ -1,0 +1,36 @@
+Hello You, yes _you_, 
+
+Help for making:
+
+	make help
+
+To recompile and install tleds, just cd to the directory where there is
+tleds.c and Makefile, su root, and give command:
+
+	make all install
+
+If you don't want to recompile just: (install needs EUID root)
+NOTE: the binaries in the tarball are compiled to use glibc. If you need
+to get them working with libc-5, you need to recompile on your machine, or
+email me and I'll will put libc5 versions available or mail back to ya.
+
+	make install
+
+For reading man page before it is installed:
+
+	man ./tleds.1
+
+If you want tleds started always in the boot up, do for example:
+
+	echo "/usr/local/bin/tleds -qcd 100 ppp0" >>/etc/rc.d/rc.local
+
+Consider the -c option when running tleds as (EUID) root.
+
+Some ppl have asked what is EUID...it's Effective User ID. So if
+you make tleds suid root and run it as normal user, your effective
+user ID comes to 0 (= root). I don't recommend making tleds suid root
+though. Just su root and run it or put it in the rc.local file.
+
+--
+	Jouni.Lohikoski@iki.fi
+

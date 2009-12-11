@@ -1,0 +1,23 @@
+VERSION	DATE		WHAT WAS FIXED OR WHAT WAS/IS NEW
+1.05b7	2 Apr 1998	Keeps LEDs deattached also after VT is reset if run
+(beta)			with -c option.
+			eth* default delay changed to 50 ms.
+			Support for 2.1.x kernel added, beta, check Makefile.
+			Before make install installed to /usr/bin, now it
+			installs to /usr/local/bin by default, but is easily
+			configurable in Makefile.
+
+1.04	29 Sep 1997	Now keeps LEDs reattached during the deep sleep.
+
+1.03	27 Sep 1997	-t option removed and -c added. -c Fixes CapsLock
+			LEDs in VTs. Has to be EUID root for -c.
+			Optimized better. Some bugs fixed.
+
+1.02	09 Sep 1997	Now detaches LEDs on /dev/tty* to make it able
+			to blink LEDs also in tty[2-12] when run as EUID root
+			IF asked with option -t (new option)
+			
+1.01	07 Sep 1997	Will use ioctl of /dev/console when EUID root.
+
+1.00	29 Aug 1997	The first release.
+

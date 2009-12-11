@@ -1,0 +1,15 @@
+Begin3
+Title:       	tleds xtleds (Network Traffic Monitoring Programs) 
+Version:	1.04      
+Entered-date:   29SEP97
+Description:    tleds and xtleds are programs which blinks keyboard LEDs
+                (Light Emitting Diode) indicating outgoing and incoming
+		network packets on selected network interface.
+Keywords:       tleds, xtleds, network, monitoring, led, keyboard
+Author:         Jouni.Lohikoski@iki.fi
+Maintained-by:  jlohikos@cc.hut.fi
+Primary-site:   http://www.iki.fi/Jouni.Lohikoski/tleds.html
+Platforms:	x86 Linux with keyboard
+Copying-policy: GPL
+End
+

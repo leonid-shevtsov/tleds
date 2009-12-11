@@ -1,0 +1,179 @@
+.TH TLEDS 1 "1998 May 22"
+.SH NAME
+tleds, xtleds \- Blinks keyboard LEDs indicating incoming and outgoing network packets.
+.SH SYNOPSIS
+.B tleds
+.RB [ \-bchkqv
+]
+.RB [ \-d 
+.B N
+]
+.B interface_name
+.br
+.B xtleds
+.RB [ \-bchkqv
+]
+.RB [ \-d 
+.B N
+]
+.B interface_name
+.SH DESCRIPTION
+These programs help you monitor network traffic. They blink Scroll-Lock LED
+(Light Emitting Diode)
+when a network packet leaves the machine, and Num-Lock LED when one is
+received.
+.PP
+.I tleds
+can be started on Virtual Terminal (VT) without X-libraries (Xlib) installed.
+After started, the user can switch to X and tleds will be able to blink
+LEDs if there is "Xleds 2 3" in the Keyboard section of the /etc/X11/XF86Config.
+.PP
+.I xtleds 
+can be started/run both on X and VT, and needs libX11.so  You will need the line
+"Xleds 2 3" in the XF86Config (see also BUGS)
+.PP
+tleds and xtleds when started from VT, and run as non root, need their
+tty to do
+.IR ioctl (2)
+to change LEDs, so also when running in the background and ignoring SIGHUP, one
+cannot exit from the VT or tleds will exit itself.
+.PP
+When run as EUID root, tleds and xtleds can run in the
+background without tty. Will use
+.IR ioctl (2)
+of /dev/console and therefore can be started for example in boot-up script, eg.
+in
+.IR /etc/rc.d/rc.local
+(see the last EXAMPLE)
+.PP
+If you want to have correct CapsLockLED in VTs, or if
+you mainly use Virtual Terminals, use the
+.B -c
+option. This will keep the LEDs blinking also after the VT is reset.
+.PP
+If you want to use xtleds with XFree v3.2 or v3.3, I suggest you run tleds
+as EUID root so you won't have to disable XKEYBOARD extension.
+(XkbDisable)
+.SH PARAMETER
+.I interface_name
+is the name of your interface which you want to monitor. You can check your
+interface devices simply with 
+.IR cat (1).
+.br
+.B cat
+.B /proc/net/dev
+.SH OPTIONS
+.TP
+-b
+Don't run on the background. Usefull when debugging and profiling.
+.TP
+-c
+Can be set only when running EUID root. Will fix CapsLock LEDs in VTs.
+Without this also the CapsLock LED is detached from actual keyboard
+flags (see 
+.IR setleds(1)
+why). Processing CapsLock will take little more CPU time.
+If you mainly use X, you won't need this.
+Also when VT is reset, for example when there has been logout and mingetty
+has been restarted, the LEDs get reattached automaticly. With -c option LEDs
+are detached again about after 20 seconds. So if you don't use X, you
+probably want to run tleds as root and use -c option.
+.TP
+-d {N}
+Set update delay in milliseconds. N must be between 1 and 10000 ms.
+Without -d the default for
+.I eth*
+(ethernet) device is 50 ms and 200 ms for
+others like:
+.I ppp*
+(Point to Point Protocol),
+.I sl*
+(SLIP) and
+.I lo
+(loopback).
+.TP
+-h
+Gives short help.
+.TP
+-k
+Kills an old tleds process running.
+.TP
+-q
+Is pretty quiet. Doesn't tell you in the start what it will do.
+.TP
+-v
+Gives version information.
+.SH EXAMPLES
+.TP
+tleds ppp0
+Starts tleds in the background and with 200 ms (default) update delay. PPP
+(Point to Poing Protocol) interface #0 is monitored.
+.TP
+tleds -d 100 ppp0
+Starts monitoring the interface ppp0 updating every 100 ms.
+.TP
+tleds -qd 100 eth0
+Blinks LEDs looking what comes and goes from eth0 (ethernet) every 100 ms.
+Starts quietly.
+.TP
+tleds -c eth1
+On eth1 and update delay is 50 ms (default). Will be able to indicate 
+correct CapsLock state in VTs because the
+.B -c
+flag, and keeps LEDs detached even over VT resets, IF started as EUID root.
+.TP
+xtleds -vbd 200 lo
+Loopback device (lo) and shows version information, delay 200 ms.
+Runs using X-Windows if started from xterm, and VT (ioctl) if started in VT.
+Doesn't fork itself in the background.
+.br
+You can test this on an other xterm window:
+.br
+.B
+ping -c 20 localhost
+.TP
+tleds -k
+Kills the beast, tleds/xtleds, runnning if there is such.
+.TP
+echo "/usr/bin/tleds -qcd 100 eth0" >>/etc/rc.d/rc.local
+(Done as EUID root) Will start tleds in the boot-up, running always in
+the backgroud. Starts quietly.
+Shows correct CapsLock state with CapsLock LED in VTs.
+Will monitor eth0 with 100 ms update delays.
+.SH FILES
+/proc/net/dev
+.br
+/tmp/tleds.pid
+.br
+/var/run/tleds.pid
+.br
+/etc/X11/XF86Config
+.SH AUTHOR
+tleds and xtleds was made by Jouni Lohikoski <Jouni.Lohikoski@iki.fi>.
+.SH COPYRIGHT
+Copyrighted and released under GNU General Public License (GPL).
+.SH URL
+<URL:http://www.iki.fi/Jouni.Lohikoski/tleds.html>
+.SH SEE ALSO
+.BR setleds (1),
+.BR xset (1),
+.BR XF86Config (4),
+.BR console_ioctl (4)
+.SH BUGS
+I hope not. Please e-mail me when you find them.
+xtleds (when run as non root) on XFree v3.2 and v3.3 doesn't work
+unless you put "XkbDisable" in the Keyboard section of XF86Config. 
+Will get SIGSEGV if tried to monitor network device which
+doesn't support /proc filesystem, eg. dummy.
+If you disconnect keyboard and are running tleds, it takes more CPU
+time I've heard. Buy an extra keyboard or email me how to detect this in
+run time.
+.PP
+One comment: kernel should enable deattach LEDs separately. Now it's all
+or none, and these programs has to do some hacks with
+.B -c
+option.
+.SH DATE
+.br
+Version 1.00 released on The Judgment Day, 29th August 1997
+
